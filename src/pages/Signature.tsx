@@ -100,10 +100,10 @@ const SignaturePad: React.FC = () => {
     <>
       <Navbar />
       <div className="w-full h-full flex justify-center items-center p-5 flex-col gap-5 relative bg-gray-100">
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 font-semibold w-full text-center">
+        <div className="w-full text-center font-semibold">
           Shiv human code digital signature generator
         </div>
-        <div className="w-full text-center font-semibold p-5">
+        <div className="w-full text-center font-semibold">
           Draw Sign in box
         </div>
         <div className="w-full md:max-w-[800px] h-96 lg:min-h-[500px]">

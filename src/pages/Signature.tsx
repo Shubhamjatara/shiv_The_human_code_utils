@@ -103,7 +103,7 @@ const SignaturePad: React.FC = () => {
         <div className="absolute top-20 left-1/2 -translate-x-1/2 font-semibold w-full text-center">
           Shiv human code digital signature generator
         </div>
-        <div className="w-full text-center font-semibold ">
+        <div className="w-full text-center font-semibold p-5">
           Draw Sign in box
         </div>
         <div className="w-full md:max-w-[800px] h-96 lg:min-h-[500px]">

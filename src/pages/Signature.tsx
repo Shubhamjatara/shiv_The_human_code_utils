@@ -6,28 +6,42 @@ const SignaturePad: React.FC = () => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [lastPos, setLastPos] = useState<{ x: number; y: number } | null>(null);
 
-  const getMousePos = (canvas: HTMLCanvasElement, event: MouseEvent) => {
+  const getPos = (canvas: HTMLCanvasElement, event: MouseEvent | TouchEvent) => {
     const rect = canvas.getBoundingClientRect();
-    return {
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top,
-    };
+    if (event.type.startsWith("touch")) {
+      const touch = (event as TouchEvent).touches[0];
+      return {
+        x: touch.clientX - rect.left,
+        y: touch.clientY - rect.top,
+      };
+    } else {
+      const mouseEvent = event as MouseEvent;
+      return {
+        x: mouseEvent.clientX - rect.left,
+        y: mouseEvent.clientY - rect.top,
+      };
+    }
   };
 
-  const handleMouseDown = (event: MouseEvent) => {
+  const handleStart = (event: MouseEvent | TouchEvent) => {
+    event.preventDefault(); // Prevent scrolling on touch devices
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const pos = getMousePos(canvas, event);
+    const pos = getPos(canvas, event);
     setLastPos(pos);
     setIsDrawing(true);
   };
 
-  const handleMouseMove = (event: MouseEvent) => {
+  const handleMove = (event: MouseEvent | TouchEvent) => {
+    event.preventDefault(); // Prevent scrolling on touch devices
     const canvas = canvasRef.current;
     if (!canvas || !isDrawing) return;
     const context = canvas.getContext("2d");
-    const pos = getMousePos(canvas, event);
+    const pos = getPos(canvas, event);
     if (context && lastPos) {
+      context.lineJoin = "round"; // Smooth line joins
+      context.lineCap = "round"; // Smooth line ends
+      context.lineWidth = 1.5; // Adjust line width as needed
       context.beginPath();
       context.moveTo(lastPos.x, lastPos.y);
       context.lineTo(pos.x, pos.y);
@@ -36,7 +50,7 @@ const SignaturePad: React.FC = () => {
     }
   };
 
-  const handleMouseUp = () => {
+  const handleEnd = () => {
     setIsDrawing(false);
     setLastPos(null);
   };
@@ -44,16 +58,35 @@ const SignaturePad: React.FC = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
+    const handleMouseDown = (event: MouseEvent) => handleStart(event);
+    const handleMouseMove = (event: MouseEvent) => handleMove(event);
+    const handleMouseUp = () => handleEnd();
+    
+    const handleTouchStart = (event: TouchEvent) => handleStart(event);
+    const handleTouchMove = (event: TouchEvent) => handleMove(event);
+    const handleTouchEnd = () => handleEnd();
+
     canvas.addEventListener("mousedown", handleMouseDown);
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseup", handleMouseUp);
     canvas.addEventListener("mouseleave", handleMouseUp);
+
+    canvas.addEventListener("touchstart", handleTouchStart, { passive: false });
+    canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+    canvas.addEventListener("touchend", handleTouchEnd);
+    canvas.addEventListener("touchcancel", handleTouchEnd);
 
     return () => {
       canvas.removeEventListener("mousedown", handleMouseDown);
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("mouseleave", handleMouseUp);
+
+      canvas.removeEventListener("touchstart", handleTouchStart);
+      canvas.removeEventListener("touchmove", handleTouchMove);
+      canvas.removeEventListener("touchend", handleTouchEnd);
+      canvas.removeEventListener("touchcancel", handleTouchEnd);
     };
   }, [isDrawing, lastPos]);
 
@@ -62,8 +95,13 @@ const SignaturePad: React.FC = () => {
     const resizeCanvas = () => {
       if (canvas) {
         const { width, height } = canvas.getBoundingClientRect();
-        canvas.width = width;
-        canvas.height = height;
+        const devicePixelRatio = window.devicePixelRatio || 1;
+        canvas.width = width * devicePixelRatio;
+        canvas.height = height * devicePixelRatio;
+        const context = canvas.getContext("2d");
+        if (context) {
+          context.scale(devicePixelRatio, devicePixelRatio);
+        }
       }
     };
 

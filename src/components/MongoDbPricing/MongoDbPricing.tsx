@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Navbar from "../navbar/Navbar";
 
 // Static conversion rate
 const USD_TO_INR = 83;
@@ -77,6 +78,7 @@ const App: React.FC = () => {
 
   return (
     <>
+    <Navbar/>
       <div className="flex justify-center items-center  flex-col xl:flex-row-reverse min-h-screen w-full">
         <div className="w-full h-full flex mt-10 mb-10">
           <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-5">

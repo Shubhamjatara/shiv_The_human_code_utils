@@ -9,18 +9,16 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
-import Image from '../../assests/shubham/Shubham singh2.jpg'
+import Image from "../../assests/shubham/Shubham singh2.jpg";
+import { link } from "fs";
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-
-
 export default function Navbar() {
   const navigation = [
-    { name: "Home", href: "#", current: true },
-    { name: "About me", href: "#", current: false },
-    { name: "Feedback", href: "#", current: false },
+    { name: "Home", link: "/", current: false },
+    { name: "Feedback", link: "#", current: false },
   ];
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -54,7 +52,7 @@ export default function Navbar() {
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
-                    to={item.href}
+                    to={item.link}
                     aria-current={item.current ? "page" : undefined}
                     className={classNames(
                       item.current
@@ -66,6 +64,17 @@ export default function Navbar() {
                     {item.name}
                   </Link>
                 ))}
+                <a
+                  href="https://portfolio-livid-nine-97.vercel.app/"
+                  aria-current={"page"}
+                  target="_blank"
+                  className={classNames(
+                    "text-gray-300 hover:bg-gray-700 hover:text-white",
+                    "rounded-md px-3 py-2 text-sm font-medium"
+                  )}
+                >
+                  {"About Me"}
+                </a>
               </div>
             </div>
           </div>
@@ -85,11 +94,7 @@ export default function Navbar() {
                 <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
-                  <img
-                    alt=""
-                    src={Image}
-                    className="h-8 w-8 rounded-full"
-                  />
+                  <img alt="" src={Image} className="h-8 w-8 rounded-full" />
                 </MenuButton>
               </div>
               {/* <MenuItems
@@ -123,7 +128,7 @@ export default function Navbar() {
             <DisclosureButton
               key={item.name}
               as="a"
-              href={item.href}
+              href={item.link}
               aria-current={item.current ? "page" : undefined}
               className={classNames(
                 item.current
@@ -135,6 +140,17 @@ export default function Navbar() {
               {item.name}
             </DisclosureButton>
           ))}
+          <a href="https://portfolio-livid-nine-97.vercel.app/" target="_blank">
+            <DisclosureButton
+              aria-current={"page"}
+              className={classNames(
+                "text-gray-300 hover:bg-gray-700 hover:text-white",
+                "block rounded-md px-3 py-2 text-base font-medium"
+              )}
+            >
+              {"About Me"}
+            </DisclosureButton>
+          </a>
         </div>
       </DisclosurePanel>
     </Disclosure>

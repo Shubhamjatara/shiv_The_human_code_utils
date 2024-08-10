@@ -10,6 +10,12 @@ const utilities = [
     bgColor: "bg-blue-500",
     hoverColor: "hover:bg-blue-600",
   },
+  {
+    name: "MongoDB Pricing calculator",
+    route: "/mongodb-serverless-pricing-calculator",
+    bgColor: "bg-blue-500",
+    hoverColor: "hover:bg-blue-600",
+  },
 ];
 
 const HomePage = () => {

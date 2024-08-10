@@ -6,7 +6,7 @@ import RoutesRoot from "./routes";
 
 function App() {
   return (
-    <div className="h-screen w-full">
+    <div className="min-h-screen w-full">
     <RoutesRoot/>
     </div>
   );
